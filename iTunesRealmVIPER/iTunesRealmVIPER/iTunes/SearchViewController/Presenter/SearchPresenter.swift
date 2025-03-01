@@ -6,21 +6,28 @@
 //
 
 import Foundation
-import UIKit
+import UIKit.UIImage
 
 final class SearchPresenter: SearchPresenterProtocol {
     weak var view: SearchViewProtocol?
-    private let interactor: SearchInteractorProtocol?
-    private let router: SearchRouterProtocol?
+    private let interactor: SearchInteractorProtocol
+    private let router: SearchRouterProtocol
 
-    init(view: SearchViewProtocol?, interactor: SearchInteractorProtocol?, router: SearchRouterProtocol?) {
+    init(view: SearchViewProtocol?,
+         interactor: SearchInteractorProtocol,
+         router: SearchRouterProtocol
+    ) {
         self.view = view
         self.interactor = interactor
         self.router = router
     }
 
+    func viewDidLoad(with term: String) {
+        searchAlbums(with: term)
+    }
+
     func searchAlbums(with searchTerm: String) {
-        interactor?.searchAlbums(with: searchTerm)
+        interactor.searchAlbums(with: searchTerm)
     }
 
     func didFetchAlbums(_ albums: [RealmAlbum]) {
@@ -31,7 +38,11 @@ final class SearchPresenter: SearchPresenterProtocol {
         view?.showError(error)
     }
 
+    func getImageData(for imageId: Int) -> Data? {
+        interactor.fetchImageData(for: imageId)
+    }
+
     func didSelectAlbum(_ album: RealmAlbum) {
-        router?.navigateToAlbumDetails(with: album)
+        router.navigateToAlbumDetails(with: album)
     }
 }

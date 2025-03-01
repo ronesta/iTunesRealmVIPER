@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import UIKit
+import UIKit.UIViewController
 
 protocol AlbumRouterProtocol: AnyObject {
-    static func createModule(with album: RealmAlbum) -> UIViewController
+    func createModule(with album: RealmAlbum) -> UIViewController
 }

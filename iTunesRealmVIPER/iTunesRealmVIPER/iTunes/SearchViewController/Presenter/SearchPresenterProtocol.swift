@@ -6,11 +6,16 @@
 //
 
 import Foundation
-import UIKit
+import UIKit.UIImage
 
 protocol SearchPresenterProtocol: AnyObject {
-    func searchAlbums(with searchTerm: String)
+    func viewDidLoad(with term: String)
+
     func didFetchAlbums(_ albums: [RealmAlbum])
+
     func didFailToFetchAlbums(_ error: String)
+
+    func getImageData(for imageId: Int) -> Data?
+
     func didSelectAlbum(_ album: RealmAlbum)
 }

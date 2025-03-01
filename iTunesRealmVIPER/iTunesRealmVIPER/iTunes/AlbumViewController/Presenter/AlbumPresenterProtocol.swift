@@ -6,9 +6,10 @@
 //
 
 import Foundation
-import UIKit
+import UIKit.UIImage
 
 protocol AlbumPresenterProtocol: AnyObject {
-    func loadAlbumDetails()
+    func viewDidLoad()
+
     func didFetchAlbumDetails(album: RealmAlbum, image: UIImage)
 }

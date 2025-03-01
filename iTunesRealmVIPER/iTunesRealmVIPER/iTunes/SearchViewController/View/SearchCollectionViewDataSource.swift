@@ -9,11 +9,12 @@ import Foundation
 import UIKit
 
 final class SearchCollectionViewDataSource: NSObject, SearchDataSourceProtocol {
-    var albums = [RealmAlbum]()
-    var storageManager: StorageManagerProtocol
+    private let presenter: SearchPresenterProtocol
 
-    init(storageManager: StorageManagerProtocol) {
-        self.storageManager = storageManager
+    var albums = [RealmAlbum]()
+
+    init(presenter: SearchPresenterProtocol) {
+        self.presenter = presenter
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -31,7 +32,7 @@ final class SearchCollectionViewDataSource: NSObject, SearchDataSourceProtocol {
 
         let album = albums[indexPath.item]
 
-        guard let imageData = storageManager.fetchImageData(forImageId: Int(album.artistId)),
+        guard let imageData = presenter.getImageData(for: Int(album.artistId)),
               let image = UIImage(data: imageData) else {
             return cell
         }

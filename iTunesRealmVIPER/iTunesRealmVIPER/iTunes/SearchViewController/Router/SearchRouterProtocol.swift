@@ -10,5 +10,4 @@ import UIKit
 
 protocol SearchRouterProtocol: AnyObject {
     func navigateToAlbumDetails(with album: RealmAlbum)
-    func performSearch(for term: String)
 }

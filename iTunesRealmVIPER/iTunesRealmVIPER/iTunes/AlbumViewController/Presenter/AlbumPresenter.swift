@@ -6,25 +6,27 @@
 //
 
 import Foundation
-import UIKit
+import UIKit.UIImage
 
 final class AlbumPresenter: AlbumPresenterProtocol {
     weak var view: AlbumViewProtocol?
-    private let interactor: AlbumInteractorProtocol?
-    private let router: AlbumRouterProtocol?
+    private let interactor: AlbumInteractorProtocol
+    private let router: AlbumRouterProtocol
     private let album: RealmAlbum
 
-    init(interactor: AlbumInteractorProtocol?,
-         router: AlbumRouterProtocol?,
+    init(view: AlbumViewProtocol?,
+         interactor: AlbumInteractorProtocol,
+         router: AlbumRouterProtocol,
          album: RealmAlbum
     ) {
+        self.view = view
         self.interactor = interactor
         self.router = router
         self.album = album
     }
 
-    func loadAlbumDetails() {
-        interactor?.loadAlbumDetails(for: album)
+    func viewDidLoad() {
+        interactor.loadAlbumDetails(for: album)
     }
 
     func didFetchAlbumDetails(album: RealmAlbum, image: UIImage) {

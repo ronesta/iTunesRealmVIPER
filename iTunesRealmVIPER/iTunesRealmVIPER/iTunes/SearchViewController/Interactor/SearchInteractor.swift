@@ -9,19 +9,23 @@ import Foundation
 import UIKit
 
 final class SearchInteractor: SearchInteractorProtocol {
-    var presenter: SearchPresenterProtocol!
-    var networkManager: NetworkManagerProtocol!
-    var storageManager: StorageManagerProtocol!
+    var presenter: SearchPresenterProtocol?
+    var networkManager: NetworkManagerProtocol?
+    var storageManager: StorageManagerProtocol?
 
     func searchAlbums(with term: String) {
-        let savedAlbums = storageManager.fetchAlbums(for: term)
+        storageManager?.saveSearchTerm(term)
 
-        guard savedAlbums.isEmpty else {
+        guard let savedAlbums = storageManager?.fetchAlbums(for: term) else {
+            return
+        }
+
+        if !savedAlbums.isEmpty {
             self.presenter?.didFetchAlbums(savedAlbums)
             return
         }
 
-        networkManager.loadAlbums(albumName: term) { [weak self] result, error  in
+        networkManager?.loadAlbums(albumName: term) { [weak self] result, error  in
             if let error {
                 print("Error getting albums: \(error)")
                 return
@@ -36,7 +40,7 @@ final class SearchInteractor: SearchInteractorProtocol {
 
             result.forEach { res in
                 group.enter()
-                self?.networkManager.loadImage(from: res.artworkUrl100) { data, error in
+                self?.networkManager?.loadImage(from: res.artworkUrl100) { data, error in
                     if let error {
                         print("Failed to load image: \(error)")
                         return
@@ -57,14 +61,19 @@ final class SearchInteractor: SearchInteractorProtocol {
                     return
                 }
 
-                storageManager.saveAlbums(albumsToSave, for: term)
+                storageManager?.saveAlbums(albumsToSave, for: term)
                 print("Successfully loaded \(albumsToSave.count) albums.")
 
                 DispatchQueue.main.async {
-                    let currentAlbums = self.storageManager.fetchAlbums(for: term)
-                    self.presenter?.didFetchAlbums(currentAlbums)
+                    if let currentAlbums = self.storageManager?.fetchAlbums(for: term) {
+                        self.presenter?.didFetchAlbums(currentAlbums)
+                    }
                 }
             }
         }
+    }
+
+    func fetchImageData(for imageId: Int) -> Data? {
+        storageManager?.fetchImageData(forImageId: imageId)
     }
 }

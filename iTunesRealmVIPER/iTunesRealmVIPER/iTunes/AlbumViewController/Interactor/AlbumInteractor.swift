@@ -9,15 +9,15 @@ import Foundation
 import UIKit
 
 final class AlbumInteractor: AlbumInteractorProtocol {
-    var presenter: AlbumPresenterProtocol!
-    var storageManager: StorageManagerProtocol!
+    var presenter: AlbumPresenterProtocol?
+    var storageManager: StorageManagerProtocol?
 
     func loadAlbumDetails(for album: RealmAlbum) {
-        guard let imageData = storageManager.fetchImageData(forImageId: Int(album.artistId)),
+        guard let imageData = storageManager?.fetchImageData(forImageId: Int(album.artistId)),
               let image = UIImage(data: imageData) else {
             return
         }
 
-        presenter.didFetchAlbumDetails(album: album, image: image)
+        presenter?.didFetchAlbumDetails(album: album, image: image)
     }
 }

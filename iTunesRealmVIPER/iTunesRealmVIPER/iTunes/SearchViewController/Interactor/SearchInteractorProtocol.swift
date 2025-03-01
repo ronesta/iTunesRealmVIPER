@@ -6,8 +6,10 @@
 //
 
 import Foundation
-import UIKit
+import UIKit.UIImage
 
 protocol SearchInteractorProtocol: AnyObject {
     func searchAlbums(with term: String)
+
+    func fetchImageData(for imageId: Int) -> Data?
 }
